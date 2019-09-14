@@ -29,7 +29,7 @@ for iF,F in enumerate(options.inputFiles):
 for ifilename,filename in enumerate(li_f):
     if filename[:6]=='/store':
         li_f[ifilename]='root://cmsxrootd.fnal.gov/'+filename
-options.inputFiles+=li_f
+options.inputFiles=li_f
 print "analyzing files:"
 for F in options.inputFiles: print F
 
@@ -37,8 +37,7 @@ for F in options.inputFiles: print F
 from math import hypot, pi, sqrt, fabs, cos, sin
 import numpy as n
 
-from jetmet_tree import *
-from functions import *
+from met_tree import *
 
 # create an oput tree.
 
@@ -111,16 +110,8 @@ for ievent,event in enumerate(events):
                 if mu.trackIso()/mu.pt()>0.10: continue #Loose working point ;
                 muonCollection.append(mu.p4())
         if len(muonCollection)<2: continue
-        mu1_pt[0]=muonCollection[0].pt()
-        mu1_eta[0]=muonCollection[0].eta()
-        mu1_phi[0]=muonCollection[0].phi()
-        mu2_pt[0]=muonCollection[1].pt()
-        mu2_eta[0]=muonCollection[1].eta()
-        mu2_phi[0]=muonCollection[1].phi()
         Zvector=muonCollection[0]+muonCollection[1] #Sum of two muon Lerentz vectors
-        h_Zmass.Fill(Zvector.M())
         if Zvector.M()<75 or Zvector.M()>105: continue
-        Zmass[0]=Zvector.M()
         pfmetvector = mets.product().front().corP4()
         puppimetvector = pmets.product().front().corP4()
         pfrecoil = pfmetvector + Zvector
